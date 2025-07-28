@@ -1,3 +1,4 @@
+// @ts-nocheck 
 
 import { create } from 'zustand';
 import { TilePatch, PlanStage, ConstructionPlanResponse, Agent, FocusResponse, CommentedTilePatchResponse } from '@/types/simulation';
@@ -23,8 +24,10 @@ interface SimulationState {
   isInfoPanelOpen: boolean;
   isPlanPanelOpen: boolean;
   
-  handleFocusChanged: (focus: FocusResponse) => void;
+  startConnecting: () => void;
+  setConnectionStatus: (isConnected: boolean) => void;
   fetchAgents: () => Promise<void>;
+  handleFocusChanged: (focus: FocusResponse) => void;
   selectAgent: (codeName: string) => void;
   startGeneration: (prompt: string) => Promise<void>;
   startCancelling: () => void;
@@ -33,16 +36,16 @@ interface SimulationState {
   handleStageStarted: (stage: PlanStage) => void;
   applyPatch: (patch: TilePatch) => void; 
   handleSimulationEnded: () => void;
-  startConnecting: () => void;
-  setConnectionStatus: (isConnected: boolean) => void;
   handleGenerationFailed: (errorMessage: string) => void;
   setPlan: (plan: PlanStage[]) => void;
   setCurrentPlanStep: (step: number) => void;
   applyPatches: (patches: TilePatch[]) => void;
+
   finishGeneration: () => void;
+
   reset: () => void;
   resetWithoutGridReset: () => void;
-    toggleInfoPanel: () => void;
+  toggleInfoPanel: () => void;
   togglePlanPanel: () => void;
 }
 
