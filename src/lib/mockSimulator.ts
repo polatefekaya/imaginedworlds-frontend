@@ -20,7 +20,7 @@ const generateMockPatches = (): TilePatch[] => {
         patches.push({
             x: Math.floor(Math.random() * 100),
             y: Math.floor(Math.random() * 100),
-            newType: Math.floor(Math.random() * 8) as TileType,
+            tileType: Math.floor(Math.random() * 8) as TileType,
         });
     }
     return patches;

@@ -8,17 +8,20 @@ import { CommentedTilePatchResponse } from '@/types/simulation';
 
 export function CityCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isConnected = useSimulationStore((state) => state.isConnected);
   const status = useSimulationStore((state) => state.status);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !isConnected) return;
+
     const context = canvas.getContext('2d');
     if (!context) return;
 
     const connection = signalRService.getConnection(); 
     if (connection) {
       const handler = (patch: CommentedTilePatchResponse) => {
+        console.log(`drawing x: ${patch.x}, y: ${patch.y}, tileType: ${patch.tileType}`)
         drawPatch(context, patch);
       };
       connection.on("WorldUpdatedPiece", handler);
@@ -27,7 +30,7 @@ export function CityCanvas() {
         connection.off("WorldUpdatedPiece", handler);
       };
     }
-  }, []);
+  }, [isConnected]);
 
   useEffect(() => {
     if (status === 'generating') {
@@ -44,9 +47,9 @@ export function CityCanvas() {
       <div className="bg-white rounded-2xl border border-slate-200 p-2">
         <canvas
           ref={canvasRef}
-          width={CANVAS_WIDTH/1.25}
-          height={CANVAS_HEIGHT/1.25}
-          className="rounded-xl"
+          width={CANVAS_WIDTH}
+          height={CANVAS_HEIGHT}
+          className="rounded-xl w-[70vmin] h-[70vmin]"
         />
       </div>
     </div>

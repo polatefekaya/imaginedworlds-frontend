@@ -3,11 +3,29 @@ import { TileType } from "./tiles";
 export interface TilePatch {
   x: number;
   y: number;
-  newType: TileType;
+  tileType: TileType;
+}
+
+export interface FlatTilePatch {
+  x: number;
+  y: number;
+  tileType: number;
+}
+
+export interface FlatCommentedTilePatchResponse extends FlatTilePatch {
+  comment: string;
 }
 
 export interface CommentedTilePatchResponse extends TilePatch {
   comment: string;
+}
+
+export interface Agent {
+  id: string;
+  displayName: string;
+  codeName: string;
+  description: string;
+  iconUrl: string;
 }
 
 export interface PlanStage {

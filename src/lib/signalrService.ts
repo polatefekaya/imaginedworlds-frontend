@@ -1,6 +1,7 @@
 import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { useSimulationStore } from '@/store/simulationStore';
-import { TilePatch, PlanStage, ConstructionPlanResponse, FocusResponse, CommentedTilePatchResponse } from '@/types/simulation';
+import { TilePatch, PlanStage, ConstructionPlanResponse, FocusResponse, CommentedTilePatchResponse, FlatCommentedTilePatchResponse } from '@/types/simulation';
+import { TileType, toTileType } from '@/types/tiles';
 
 class SignalRService {
   private connection: HubConnection | null = null;
@@ -37,26 +38,34 @@ class SignalRService {
     if (!this.connection) return;
 
     this.connection.on("SimulationStarted", () => {
+      console.log("SimulationStarted received");
       useSimulationStore.getState().handleSimulationStarted();
     });
 
     this.connection.on("PlanCreated", (plan: ConstructionPlanResponse) => {
+      console.log("PlanCreated received");
       useSimulationStore.getState().handlePlanCreated(plan);
     });
     
     this.connection.on("StageStarted", (stage: PlanStage) => {
+      console.log("StageStarted received");
       useSimulationStore.getState().handleStageStarted(stage);
     });
 
     this.connection.on("FocusChanged", (focus: FocusResponse) => {
       console.log("AI focus changed to:", focus);
+      useSimulationStore.getState().handleFocusChanged(focus);
     });
     
-    this.connection.on("WorldUpdatedPiece", (patch: CommentedTilePatchResponse) => {
-      useSimulationStore.getState().applyPatch(patch);
+    this.connection.on("WorldUpdatedPiece", (patch: FlatCommentedTilePatchResponse) => {
+      console.log("WorldUpdatedPiece received");
+
+      const resp:CommentedTilePatchResponse = {x: patch.x, y: patch.y, comment: patch.comment, tileType: toTileType(patch.tileType) as TileType}
+      useSimulationStore.getState().applyPatch(resp);
     });
 
     this.connection.on("SimulationEnded", () => {
+      console.log("SimulationEnded received");
       useSimulationStore.getState().handleSimulationEnded();
     });
     
@@ -65,6 +74,7 @@ class SignalRService {
     });
 
     this.connection.on("GenerationFailed", (errorMessage: string) => {
+      console.log("GenerationFailed received");
         useSimulationStore.getState().handleGenerationFailed(errorMessage);
     });
   }
