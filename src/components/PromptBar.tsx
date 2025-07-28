@@ -63,10 +63,10 @@ export function PromptBar() {
   }
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-10">
+    <div className="fixed bottom-6 left-1/2 max-w-11/12 -translate-x-1/2 z-10">
       
       {isInteractive && isAgentSelectorOpen && (
-        <div className="absolute bottom-full mb-3 w-full rounded-xl bg-white/90 p-2 shadow-2xl backdrop-blur-lg border border-slate-200/80">
+        <div className="absolute bottom-full mb-3 w-full rounded-xl bg-white p-2 shadow-2xl backdrop-blur-lg border border-slate-200/80">
           <div className="flex flex-col gap-1">
             {agents.map((agent) => (
               <button
@@ -85,17 +85,17 @@ export function PromptBar() {
           </div>
         </div>
       )}
-      <div className="flex items-center gap-2 rounded-full bg-white/70 p-2 shadow-xl backdrop-blur-lg border border-slate-200/80">
+      <div className="flex items-center gap-2 rounded-full bg-white p-2  backdrop-blur-lg border border-slate-300">
         
         <button 
           onClick={() => setAgentSelectorOpen(!isAgentSelectorOpen)}
           disabled={!isInteractive}
-          className="flex items-center gap-2 p-3 rounded-full hover:bg-slate-200/70 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 p-3 rounded-full hover:bg-blue-100 disabled:cursor-not-allowed"
         >
           {selectedAgent ? (
             <img src={selectedAgent.iconUrl} alt={selectedAgent.displayName} className="w-7 h-7"/>
           ) : (
-            <div className="w-7 h-7 rounded-full bg-slate-300 animate-pulse"/>
+            <div className="w-7 h-7 rounded-full bg-blue-300 animate-pulse"/>
           )}
           <ChevronUp className={`w-5 h-5 text-slate-500 transition-transform ${isAgentSelectorOpen ? 'rotate-180' : ''}`} />
         </button>
@@ -106,7 +106,7 @@ export function PromptBar() {
           onChange={(e) => setPrompt(e.target.value)}
           disabled={!isInteractive || !selectedAgentCodeName}
           placeholder={status === 'fetching_agents' ? "Loading agents..." : selectedAgentCodeName ? "Imagine a world..." : "Select an agent to begin"}
-          className="w-80 bg-transparent px-4 text-lg placeholder-slate-400 focus:outline-none"
+          className="w-80 bg-transparent px-4 text-lg placeholder-slate-500 focus:outline-none text-slate-900"
         />
 
         {isWorking ? (

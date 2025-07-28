@@ -43,7 +43,7 @@ export function CityCanvas() {
   
 
   return (
-    <div className="bg-gray-900 absolute inset-0 flex h-full w-full items-center justify-center">
+    <div className="bg-gray-100 absolute inset-0 flex h-full w-full items-center justify-center">
       <div className="bg-white rounded-2xl border border-slate-200 p-2">
         <canvas
           ref={canvasRef}
